@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-secondary);
+}
+
+.page-container {
+  width: 100%;
+  min-height: calc(100vh - 7rem);
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 0rem;
+  padding-bottom: 2rem;
+}
+
+:root {
+  --color-primary: #9cee68;
+  --color-secondary: #212121;
+  --color-bg-headerlight: #333333;
+  --color-bg-sidebar: #2c2c2a;
+}

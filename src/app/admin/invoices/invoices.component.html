@@ -1,0 +1,112 @@
+<div class="page-container">
+  <div class="flex align-items-center justify-content-between">
+    <h2>Listado de pagos</h2>
+  </div>
+
+  <p-card>
+    <div class="flex flex-column justify-content-between gap-3">
+      <p-table
+        [value]="invoices"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{ 'min-width': '50rem' }"
+      >
+        <ng-template pTemplate="caption">
+          <div class="w-full flex justify-content-end">
+            <p-inputGroup class="w-5">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="modelSearch"
+                placeholder="Buscar pagos"
+                (keyup.enter)="search()"
+              />
+              <button
+                pButton
+                type="button"
+                icon="pi pi-search"
+                class="p-button-primary w-2"
+                (click)="search()"
+              ></button>
+            </p-inputGroup>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 10%" pSortableColumn="id">
+              ID<p-sortIcon field="id" />
+            </th>
+            <th>ID Contrato</th>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Producto</th>
+            <th>Monto</th>
+            <th>Referencia</th>
+            <th>Método</th>
+            <th>Verificado</th>
+            <th>Detalles</th>
+            <th>Fecha</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-invoice>
+          <tr>
+            <td>{{ invoice.id }}</td>
+            <td [pTooltip]="invoice.id_contract" tooltipPosition="top">
+              {{ invoice.id_contract }}
+            </td>
+            <td [pTooltip]="invoice.user_name" tooltipPosition="top">
+              {{ invoice.user_name }}
+            </td>
+            <td [pTooltip]="invoice.user_email" tooltipPosition="top">
+              {{ invoice.user_email }}
+            </td>
+            <td [pTooltip]="invoice.product_name" tooltipPosition="top">
+              {{ invoice.product_name }}
+            </td>
+            <td [pTooltip]="invoice.amount.toFixed(2)" tooltipPosition="top">
+              {{ invoice.amount.toFixed(2) }}
+            </td>
+            <td [pTooltip]="invoice.payment_ref" tooltipPosition="top">
+              {{ invoice.payment_ref }}
+            </td>
+            <td [pTooltip]="invoice.payment_method" tooltipPosition="top">
+              {{ invoice.payment_method }}
+            </td>
+            <td>
+              {{ invoice.verified_payment ? "Sí" : "No" }}
+            </td>
+            <td>
+              <p-button
+                icon="pi pi-eye"
+                [rounded]="true"
+                [text]="true"
+                [raised]="true"
+                (click)="showDetailsModal(invoice)"
+              />
+            </td>
+            <td [pTooltip]="invoice.payment_date" tooltipPosition="top">
+              {{ invoice.payment_date }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="11">
+              {{
+                queryPagination.search == ""
+                  ? "No se han creado pagos"
+                  : "No se han encontrado coincidencias"
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator
+        #paginator
+        (onPageChange)="onPageChange($event)"
+        [rows]="queryPagination.size"
+        [totalRecords]="totalRows"
+      />
+    </div>
+  </p-card>
+</div>

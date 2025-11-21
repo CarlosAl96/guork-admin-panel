@@ -1,0 +1,129 @@
+<div class="page-container">
+  <div class="flex align-items-center justify-content-between">
+    <h2>Listado de contratos adjudicados</h2>
+  </div>
+
+  <p-card>
+    <div class="flex flex-column justify-content-between gap-3">
+      <p-table
+        [value]="contracts"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{ 'min-width': '50rem' }"
+      >
+        <ng-template pTemplate="caption">
+          <div class="w-full flex gap-3 justify-content-end">
+            <p-inputGroup class="w-5">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="modelSearch"
+                placeholder="Buscar contratos adjudicados"
+                (keyup.enter)="search()"
+              />
+              <button
+                pButton
+                type="button"
+                icon="pi pi-search"
+                class="p-button-primary w-2"
+                (click)="search()"
+              ></button>
+            </p-inputGroup>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 10%" pSortableColumn="id">
+              ID<p-sortIcon field="id" />
+            </th>
+            <th>Usuario</th>
+            <th>Correo</th>
+            <th>Producto</th>
+            <th>N° Cuotas</th>
+            <th>Progreso</th>
+            <th>Cuota</th>
+            <th>Total</th>
+            <th>Fecha</th>
+            <th>Descargar</th>
+            <th>Historial</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-contract>
+          <tr>
+            <td>{{ contract.id }}</td>
+            <td
+              [pTooltip]="contract.user_name + ' ' + contract.user_last_name"
+              tooltipPosition="top"
+            >
+              {{ contract.user_name + " " + contract.user_last_name }}
+            </td>
+            <td [pTooltip]="contract.user_email" tooltipPosition="top">
+              {{ contract.user_email }}
+            </td>
+            <td [pTooltip]="contract.product_name" tooltipPosition="top">
+              {{ contract.product_name }}
+            </td>
+            <td [pTooltip]="contract.number_of_quotas" tooltipPosition="top">
+              {{ contract.number_of_quotas }}
+            </td>
+            <td [pTooltip]="contract.payed_percent + '%'" tooltipPosition="top">
+              {{ contract.payed_percent > 100 ? 100 : contract.payed_percent }}%
+            </td>
+            <td [pTooltip]="contract.quota_value" tooltipPosition="top">
+              {{ contract.quota_value }}
+            </td>
+            <td [pTooltip]="contract.total_value" tooltipPosition="top">
+              {{ contract.total_value }}
+            </td>
+            <!-- <td [pTooltip]="contract.rating + '%'" tooltipPosition="top">
+              {{ contract.rating + "%" }}
+            </td> -->
+            <td
+              [pTooltip]="contract.created_date | dateFormat"
+              tooltipPosition="top"
+            >
+              {{ contract.created_date | dateFormat }}
+            </td>
+            <td>
+              <p-button
+                icon="pi pi-download"
+                [rounded]="true"
+                [text]="true"
+                [raised]="true"
+                severity="success"
+                (click)="downloadPdf(contract)"
+              />
+            </td>
+            <td>
+              <p-button
+                icon="pi pi-eye"
+                [rounded]="true"
+                [text]="true"
+                [raised]="true"
+                severity="success"
+                (click)="showHistoryModal(contract.id_user)"
+              />
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="11">
+              {{
+                queryPagination.search == ""
+                  ? "No hay contratos adjudicados"
+                  : "No se han encontrado coincidencias"
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator
+        #paginator
+        (onPageChange)="onPageChange($event)"
+        [rows]="queryPagination.size"
+        [totalRecords]="totalRows"
+      />
+    </div>
+  </p-card>
+</div>

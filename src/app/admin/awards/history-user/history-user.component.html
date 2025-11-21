@@ -1,0 +1,29 @@
+<div>
+  @if(user){
+  <h2>Datos del usuario</h2>
+  <p><strong>Usuario: </strong> {{ user.name + " " + user.last_name }}</p>
+  <p><strong>Correo del usuario: </strong> {{ user.email }}</p>
+  <p><strong>Teléfono: </strong> {{ user.phone }}</p>
+  <p><strong>Cédula: </strong> {{ user.identification }}</p>
+
+  <h2>Historial en Zueño</h2>
+  <p><strong>Rating: </strong> {{ user.rating }}%</p>
+  <p><strong>Cuotas completadas: </strong> {{ user.quotascomplete }}</p>
+  <p><strong>Cuotas pagadas a tiempo: </strong>{{ user.paystime }}</p>
+  <p>
+    <strong>Cuotas pagadas con atraso: </strong>
+    {{ user.paystotal - user.paystime }}
+  </p>
+  <p><strong>Total de cuotas: </strong> {{ user.quotastotal }}</p>
+  <p><strong>Total pagado: </strong> {{ user.contributions }}</p>
+  <p><strong>Total a pagar: </strong> {{ user.totalexpense }}</p>
+
+  }
+  <div class="flex justify-content-end">
+    <p-button
+      class="btn-primary"
+      label="Cerrar"
+      (onClick)="refDialog.close()"
+    />
+  </div>
+</div>

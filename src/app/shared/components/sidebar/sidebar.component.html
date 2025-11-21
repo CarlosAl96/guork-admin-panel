@@ -1,0 +1,253 @@
+<div
+  [class]="
+    'sidebar overflow-y-auto' +
+    (showSidebar ? ' show-sidebar' : ' hide-sidebar')
+  "
+>
+  <ul class="list-none p-0 m-0 overflow-hidden">
+    <li>
+      <div
+        class="flex align-items-center justify-content-between text-700 brand"
+      >
+        <i
+          class="pi pi-bars cursor-pointer text-2xl"
+          (click)="changeStatusSidebar(!showSidebar)"
+        ></i>
+        @if (showSidebar) {
+        <img style="width: 120px" src="./assets/images/logo.svg" />
+        }
+      </div>
+    </li>
+    <li class="mt-5">
+      <a
+        pRipple
+        routerLink="/admin/usuarios"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-users text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Usuarios</span
+        >
+      </a>
+    </li>
+    @if (user?.role == 'full_admin') {
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/dealers"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-briefcase text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Concesionarios</span
+        >
+      </a>
+    </li>
+    }
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/calendario"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-calendar text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Calendario</span
+        >
+      </a>
+    </li>
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/productos"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-list text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Productos</span
+        >
+      </a>
+    </li>
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/contratos"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-file-check text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Contratos</span
+        >
+      </a>
+    </li>
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/pagos"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-money-bill text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Pagos</span
+        >
+      </a>
+    </li>
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/proximos-pagos"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-money-bill text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Próximos pagos</span
+        >
+      </a>
+    </li>
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/adjudicaciones"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-receipt text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Adjudicaciones</span
+        >
+      </a>
+    </li>
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/vendedores"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-id-card text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Vendedores</span
+        >
+      </a>
+    </li>
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/pagos-vendedores"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-money-bill text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Pagos a vendedores</span
+        >
+      </a>
+    </li>
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/notificaciones"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-bell text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Enviar notificaiones</span
+        >
+      </a>
+    </li>
+  </ul>
+  <ul class="list-none p-0 m-0 overflow-hidden">
+    <li>
+      <a
+        pRipple
+        (click)="logout()"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-power-off text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Cerrar sesión</span
+        >
+      </a>
+    </li>
+  </ul>
+</div>

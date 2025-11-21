@@ -1,0 +1,61 @@
+.sidebar {
+    width: 17rem;
+    height: 100vh;
+    background-color: var(--color-bg-sidebar);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: sticky;
+    top: 0px;
+    z-index: 9;
+    -webkit-box-shadow: 2px 0px 15px -10px rgba(0, 0, 0, 0.83);
+    -moz-box-shadow: 2px 0px 15px -10px rgba(0, 0, 0, 0.83);
+    box-shadow: 2px 0px 15px -10px rgba(0, 0, 0, 0.83)
+}
+
+.hide-sidebar {
+    width: 3.7rem;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.show-sidebar {
+    width: 17rem;
+    transition: all 0.3s;
+}
+
+.show-item {
+    display: block;
+    text-wrap: nowrap;
+    transition: all 0.3s;
+}
+
+.hide-item {
+    display: none;
+    transition: all 0.3s;
+}
+
+.item {
+    height: 3.5rem;
+    &.active {
+        background-color: var(--color-primary);
+        color: var(--color-secondary) !important;
+    }
+}
+
+.item:hover {
+    background-color: var(--color-primary);
+    color: var(--color-secondary) !important;
+    transition: all 0.3s;
+}
+
+.only-icon {
+    transition: all 0.3s;
+}
+
+.brand {
+    color: var(--color-primary) !important;
+    padding-left: 1rem;
+    padding-right: 0.5rem;
+    height: 80px;
+}

@@ -1,0 +1,183 @@
+<div class="page-container">
+  <div class="flex align-items-center justify-content-between">
+    <h2>Listado de vendedores</h2>
+  </div>
+
+  <p-card>
+    <div class="flex flex-column justify-content-between gap-3">
+      <p-table
+        [value]="sellers"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        dataKey="id"
+      >
+        <ng-template pTemplate="caption">
+          <div class="w-full flex justify-content-between">
+            <div class="w-full block">
+              <p-button
+                label="Agregar vendedor"
+                icon="pi pi-plus"
+                (click)="showCreateModal()"
+              />
+            </div>
+            <div class="w-full flex">
+              <p-inputGroup>
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="modelSearch"
+                  placeholder="Buscar vendedores"
+                  (keyup.enter)="search()"
+                />
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-search"
+                  class="p-button-primary w-2"
+                  (click)="search()"
+                ></button>
+              </p-inputGroup>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 5rem"></th>
+            <th style="width: 10%" pSortableColumn="id">
+              ID<p-sortIcon field="id" />
+            </th>
+            <th>Nombre</th>
+            <th>Nombre de usuario</th>
+            <th>Correo</th>
+            <th>Cédula</th>
+            <th>Teléfono</th>
+            <th>Total a pagar</th>
+            <th>Fecha de registro</th>
+            <th style="width: 10%">Acción</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-seller let-expanded="expanded">
+          <tr>
+            <td>
+              <p-button
+                type="button"
+                pRipple
+                [pRowToggler]="seller"
+                [text]="true"
+                [rounded]="true"
+                [plain]="true"
+                [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+              />
+            </td>
+            <td>{{ seller.id }}</td>
+            <td
+              [pTooltip]="seller.first_name + ' ' + seller.last_name"
+              tooltipPosition="top"
+            >
+              {{ seller.first_name + " " + seller.last_name }}
+            </td>
+            <td [pTooltip]="seller.username" tooltipPosition="top">
+              {{ seller.username }}
+            </td>
+            <td [pTooltip]="seller.email" tooltipPosition="top">
+              {{ seller.email }}
+            </td>
+            <td [pTooltip]="seller.identification" tooltipPosition="top">
+              {{ seller.identification }}
+            </td>
+            <td [pTooltip]="seller.phone" tooltipPosition="top">
+              {{ seller.phone }}
+            </td>
+            <td [pTooltip]="seller.total_to_pay" tooltipPosition="top">
+              {{ seller.total_to_pay }}
+            </td>
+            <td
+              pTooltip="{{ seller.created_at | dateFormat }}"
+              tooltipPosition="top"
+            >
+              {{ seller.created_at | dateFormat }}
+            </td>
+            <td class="flex gap-1 p-5">
+              @if(seller.total_to_pay>0){
+              <button
+                pButton
+                type="button"
+                severity="success"
+                icon="pi pi-wallet"
+                class="p-button-primary"
+                (click)="markAsPayed(seller.id)"
+              ></button>
+              }
+              <button
+                pButton
+                type="button"
+                icon="pi pi-pen-to-square"
+                class="p-button-primary"
+                (click)="showEditModal(seller)"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="10">
+              {{
+                queryPagination.search == ""
+                  ? "No se han creado vendedores"
+                  : "No se han encontrado coincidencias"
+              }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="rowexpansion" let-seller>
+          <tr>
+            <td colspan="10" style="background-color: #2c2c2a">
+              <div class="p-3">
+                <p-table [value]="seller.sales" dataKey="id">
+                  <ng-template pTemplate="caption">
+                    <span class="text-xl">Ventas de {{ seller.username }}</span>
+                  </ng-template>
+                  <ng-template pTemplate="header">
+                    <tr>
+                      <th>ID</th>
+                      <th>ID del cliente</th>
+                      <th>ID del contrato</th>
+                      <th>Cliente</th>
+                      <th>Producto</th>
+                      <th>Monto a pagar</th>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-sale>
+                    <tr>
+                      <td>{{ sale.id }}</td>
+                      <td>{{ sale.user_id }}</td>
+                      <td>{{ sale.contract_id }}</td>
+                      <td>{{ sale.buyer_name }}</td>
+                      <td>{{ sale.product_name }}</td>
+                      <td>{{ sale.amount_to_pay }}</td>
+                    </tr>
+                  </ng-template>
+                  <ng-template pTemplate="emptymessage">
+                    <tr>
+                      <td colspan="6">
+                        Este vendedor no tiene ventas por cobrar
+                      </td>
+                    </tr>
+                  </ng-template>
+                </p-table>
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator
+        #paginator
+        (onPageChange)="onPageChange($event)"
+        [rows]="queryPagination.size"
+        [totalRecords]="totalRows"
+      />
+    </div>
+  </p-card>
+</div>
+<p-confirmDialog />

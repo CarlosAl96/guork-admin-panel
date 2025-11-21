@@ -1,0 +1,15 @@
+.header {
+    height: 3.5rem;
+    background-color: var(--color-bg-headerlight);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 0.5rem;
+    position: sticky;
+    top: 0px;
+    z-index: 9;
+    -webkit-box-shadow: 0px 2px 15px -10px rgba(0, 0, 0, 0.83);
+    -moz-box-shadow: 0px 2px 15px -10px rgba(0, 0, 0, 0.83);
+    box-shadow: 0px 2px 15px -10px rgba(0, 0, 0, 0.83);
+}

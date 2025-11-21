@@ -1,0 +1,155 @@
+<div class="page-container">
+  <div class="flex align-items-center justify-content-between">
+    <h2>Listado de productos</h2>
+  </div>
+
+  <p-card>
+    <div class="flex flex-column justify-content-between gap-3">
+      <p-table
+        [value]="products"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{ 'min-width': '50rem' }"
+      >
+        <ng-template pTemplate="caption">
+          <div class="w-full flex justify-content-between">
+            <div class="w-full flex align-items-center gap-2">
+              @if (this.user?.role == 'full_admin') {
+              <p-button
+                label="Agregar producto"
+                icon="pi pi-plus"
+                (click)="showCreateModal()"
+              />
+              <p-button
+                label="Diferencial por categoría"
+                icon="pi pi-cog"
+                (click)="showCategoryValuesModal()"
+              />
+              }
+            </div>
+            <div class="w-full flex">
+              <p-dropdown
+                class="mr-2"
+                styleClass="w-15rem"
+                [options]="categories"
+                [(ngModel)]="modelCategory"
+                optionLabel="name"
+                optionValue="code"
+                placeholder="Filtrar por categoría"
+                (onChange)="search()"
+              />
+              <p-inputGroup>
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="modelSearch"
+                  placeholder="Buscar productos"
+                  (keyup.enter)="search()"
+                />
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-search"
+                  class="p-button-primary w-2"
+                  (click)="search()"
+                ></button>
+              </p-inputGroup>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 10%" pSortableColumn="id">
+              ID<p-sortIcon field="id" />
+            </th>
+            <th>Producto</th>
+            <th>Foto</th>
+            <th>Precio</th>
+            <th>Categoría</th>
+            <th>Fecha de registro</th>
+            <th>Stock</th>
+            @if (this.user?.role == 'full_admin') {
+            <th style="width: 10%">Acción</th>
+            }
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-product>
+          <tr>
+            <td>{{ product.id }}</td>
+            <td [pTooltip]="product.name" tooltipPosition="top">
+              {{ product.name }}
+            </td>
+            <td>
+              <img class="product-img" src="{{ product.url_image }}" />
+            </td>
+            <td [pTooltip]="product.price" tooltipPosition="top">
+              {{ product.price }}
+            </td>
+            <td
+              [pTooltip]="getCategoryName(product.category)"
+              tooltipPosition="top"
+            >
+              {{ getCategoryName(product.category) }}
+            </td>
+            <td [pTooltip]="product.date | dateFormat" tooltipPosition="top">
+              {{ product.date | dateFormat }}
+            </td>
+            <td>
+              <p-inputSwitch
+                [readonly]="true"
+                [(ngModel)]="product.is_view"
+                (click)="
+                  editStatusProduct(product.id, product.name, product.is_view)
+                "
+              />
+            </td>
+            @if (this.user?.role == 'full_admin') {
+            <td class="flex gap-1 p-5">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-copy"
+                class="p-button-primary"
+                (click)="showCreateModal(product)"
+              ></button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-pen-to-square"
+                class="p-button-primary"
+                (click)="showEditModal(product)"
+              ></button>
+              <button
+                pButton
+                type="button"
+                icon="pi pi-trash"
+                class="p-button-danger"
+                (click)="deleteProduct(product.id, product.url_image)"
+              ></button>
+            </td>
+            }
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8">
+              {{
+                queryPagination.search == ""
+                  ? "No se han creado productos"
+                  : "No se han encontrado coincidencias"
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator
+        #paginator
+        (onPageChange)="onPageChange($event)"
+        [rows]="queryPagination.size"
+        [totalRecords]="totalRows"
+      />
+    </div>
+  </p-card>
+</div>
+
+<p-confirmDialog />

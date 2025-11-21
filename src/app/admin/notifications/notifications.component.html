@@ -1,0 +1,110 @@
+<div class="page-container">
+  <div class="flex align-items-center justify-content-between">
+    <h2>Listado de notificaciones</h2>
+  </div>
+
+  <p-card>
+    <div class="flex flex-column justify-content-between gap-3">
+      <p-table
+        [value]="notifications"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{ 'min-width': '50rem' }"
+      >
+        <ng-template pTemplate="caption">
+          <div class="w-full flex justify-content-between">
+            <div class="w-full flex align-items-center gap-2">
+              @if (this.user?.role == 'full_admin') {
+              <p-button
+                label="Nueva notificación"
+                icon="pi pi-bell"
+                (click)="showCreateModal()"
+              />
+
+              }
+            </div>
+            <div class="w-full flex">
+              <p-inputGroup>
+                <input
+                  pInputText
+                  type="text"
+                  [(ngModel)]="modelSearch"
+                  placeholder="Buscar notificaciones"
+                  (keyup.enter)="search()"
+                />
+                <button
+                  pButton
+                  type="button"
+                  icon="pi pi-search"
+                  class="p-button-primary w-2"
+                  (click)="search()"
+                ></button>
+              </p-inputGroup>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th style="width: 10%" pSortableColumn="id">
+              ID<p-sortIcon field="id" />
+            </th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th>Fecha</th>
+            @if (this.user?.role == 'full_admin') {
+            <th>Acción</th>
+            }
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-notification>
+          <tr>
+            <td>{{ notification.id }}</td>
+            <td [pTooltip]="notification.title" tooltipPosition="top">
+              {{ notification.title }}
+            </td>
+            <td [pTooltip]="notification.description" tooltipPosition="top">
+              {{ notification.description }}
+            </td>
+            <td
+              [pTooltip]="notification.created_date | dateFormat"
+              tooltipPosition="top"
+            >
+              {{ notification.created_date | dateFormat }}
+            </td>
+
+            @if (this.user?.role == 'full_admin') {
+            <td class="flex gap-1 p-5">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-refresh"
+                class="p-button-primary"
+                (click)="resendNotification(notification)"
+              ></button>
+            </td>
+            }
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="5">
+              {{
+                queryPagination.search == ""
+                  ? "No se han creado notificaiones"
+                  : "No se han encontrado coincidencias"
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator
+        #paginator
+        (onPageChange)="onPageChange($event)"
+        [rows]="queryPagination.size"
+        [totalRecords]="totalRows"
+      />
+    </div>
+  </p-card>
+</div>
+
+<p-confirmDialog />

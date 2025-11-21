@@ -1,0 +1,106 @@
+<form
+  class="flex flex-column gap-3"
+  [formGroup]="formGroup"
+  (ngSubmit)="createOrEdit()"
+>
+  <div class="flex gap-3 mt-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="name">Nombre</label>
+      <input
+        pInputText
+        styleClass="w-full"
+        formControlName="name"
+        inputId="name"
+      />
+    </div>
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="birthdate">Fecha de nacimiento</label>
+      <p-calendar
+        formControlName="birthdate"
+        inputId="birthdate"
+        styleClass="w-full"
+        dateFormat="dd/mm/yy"
+      />
+    </div>
+  </div>
+  <div class="flex gap-3 mt-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="last_name">Apellido</label>
+      <input
+        pInputText
+        styleClass="w-full"
+        formControlName="last_name"
+        inputId="last_name"
+      />
+    </div>
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="identification">Cédula</label>
+      <input
+        pInputText
+        styleClass="w-full"
+        formControlName="identification"
+        inputId="identification"
+      />
+    </div>
+  </div>
+  <div class="flex gap-3 mt-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="phone">Teléfono</label>
+      <input
+        pInputText
+        styleClass="w-full"
+        formControlName="phone"
+        inputId="phone"
+      />
+    </div>
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="postal_code">Código postal</label>
+      <input
+        pInputText
+        styleClass="w-full"
+        formControlName="postal_code"
+        inputId="postal_code"
+      />
+    </div>
+  </div>
+  <div class="flex gap-3 mt-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="street">Dirección</label>
+      <input
+        pInputText
+        styleClass="w-full"
+        formControlName="street"
+        inputId="street"
+      />
+    </div>
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="city">Ciudad</label>
+      <input
+        pInputText
+        styleClass="w-full"
+        formControlName="city"
+        inputId="city"
+      />
+    </div>
+  </div>
+
+  <div class="w-full flex justify-content-end mt-3">
+    @if (option == 'edit') {
+    <p-button
+      class="btn-primary"
+      type="submit"
+      [disabled]="!formGroup.valid"
+      [loading]="loading"
+      label="Guardar usuario"
+    />
+    } @else {
+    <p-button
+      class="btn-primary"
+      type="submit"
+      [disabled]="!formGroup.valid"
+      [loading]="loading"
+      label="Guardar usuario"
+    />
+    }
+  </div>
+</form>
