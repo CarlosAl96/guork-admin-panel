@@ -1,23 +1,25 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Paginator, PaginatorModule } from 'primeng/paginator';
-import { QueryPagination } from '../../core/models/queryPagination';
-import { User } from '../../core/models/user';
-import { UsersService } from '../../core/services/users.service';
-import { TableModule } from 'primeng/table';
-import { ButtonModule } from 'primeng/button';
-import { FormsModule } from '@angular/forms';
-import { TooltipModule } from 'primeng/tooltip';
-import { CardModule } from 'primeng/card';
-import { InputTextModule } from 'primeng/inputtext';
-import { InputGroupModule } from 'primeng/inputgroup';
-import { DateFormatPipe } from '../../core/pipes/date-format.pipe';
-import { SessionService } from '../../core/services/session.service';
-import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
-import { NewUserComponent } from './new-user/new-user.component';
-import { DniViewComponent } from './dni-view/dni-view.component';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { PaginatorModule } from "primeng/paginator";
+import { QueryPagination } from "../../core/models/queryPagination";
+import { User } from "../../core/models/user";
+import { UsersService } from "../../core/services/users.service";
+import { TableModule } from "primeng/table";
+import { ButtonModule } from "primeng/button";
+import { FormsModule } from "@angular/forms";
+import { TooltipModule } from "primeng/tooltip";
+import { CardModule } from "primeng/card";
+import { InputTextModule } from "primeng/inputtext";
+import { InputGroupModule } from "primeng/inputgroup";
+import { SessionService } from "../../core/services/session.service";
+import { DialogService, DynamicDialogRef } from "primeng/dynamicdialog";
+import { NewUserComponent } from "./new-user/new-user.component";
+import { DniViewComponent } from "./dni-view/dni-view.component";
+import { DropdownModule } from "primeng/dropdown";
+import { DropOption } from "../../core/models/dropOption";
+import { DateFormatPipe } from "../../core/pipes/date-format.pipe";
 
 @Component({
-  selector: 'app-users',
+  selector: "app-users",
   standalone: true,
   imports: [
     TableModule,
@@ -28,28 +30,34 @@ import { DniViewComponent } from './dni-view/dni-view.component';
     CardModule,
     InputTextModule,
     InputGroupModule,
+    DropdownModule,
     DateFormatPipe,
   ],
   providers: [DialogService],
-  templateUrl: './users.component.html',
-  styleUrl: './users.component.scss',
+  templateUrl: "./users.component.html",
+  styleUrl: "./users.component.scss",
 })
 export class UsersComponent implements OnInit {
-  @ViewChild('paginator', { static: true }) paginator!: Paginator;
-
   public users: User[] = [];
   public userLogged!: User | undefined;
   public dialogRef!: DynamicDialogRef;
   public totalRows: number = 0;
   public initPage: boolean = true;
-  public modelSearch: string = '';
+  public modelSearch: string = "";
+  public isLoading: boolean = false;
 
   public queryPagination: QueryPagination = {
     page: 1,
-    size: 50,
-    search: '',
-    code_dealer: 0,
+    pageSize: 10,
   };
+
+  public selectedUserType: string = "";
+  public userTypes: DropOption[] = [
+    { name: "Todos", code: "" },
+    { name: "Usuario", code: "user" },
+    { name: "Administrador", code: "admin" },
+    { name: "Experto", code: "expert" },
+  ];
 
   constructor(
     private readonly usersService: UsersService,
@@ -58,23 +66,28 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.userLogged = this.sessionService.readSession('USER_TOKEN')?.user;
-    this.queryPagination.code_dealer = this.userLogged?.code_dealer ?? 0;
+    this.userLogged = this.sessionService.readSession("USER_TOKEN")?.user;
     this.getUsersList(this.queryPagination);
   }
 
   public getUsersList(query: QueryPagination): void {
-    this.usersService.getUsers(query).subscribe((res) => {
-      if (res) {
-        this.users = res.response.data;
-        this.totalRows = res.response.totalRows;
-      }
+    this.isLoading = true;
+    this.usersService.getUsers(query).subscribe({
+      next: (res) => {
+        this.users = res.items;
+        this.totalRows = res.totalItems;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      },
     });
   }
 
   public search(): void {
     this.queryPagination.search = this.modelSearch;
     this.queryPagination.page = 1;
+    this.queryPagination.role = this.selectedUserType;
     this.getUsersList(this.queryPagination);
   }
 
@@ -86,12 +99,26 @@ export class UsersComponent implements OnInit {
   public showEditModal(user: User): void {
     const data: any = {
       user: user,
-      option: 'edit',
+      option: "edit",
     };
     this.dialogRef = this.dialogService.open(NewUserComponent, {
       data: data,
-      header: 'Editar usuario',
-      width: '70rem',
+      header: "Editar usuario",
+      width: "80rem",
+    });
+
+    this.onCloseModal();
+  }
+
+  public showCreateModal(role: string): void {
+    const data: any = {
+      role: role,
+      option: "create",
+    };
+    this.dialogRef = this.dialogService.open(NewUserComponent, {
+      data: data,
+      header: "Crear " + (role == "expert" ? "experto" : "usuario"),
+      width: "80rem",
     });
 
     this.onCloseModal();
@@ -99,29 +126,8 @@ export class UsersComponent implements OnInit {
 
   private onCloseModal(): void {
     this.dialogRef.onClose.subscribe(() => {
-      // this.queryPagination.page = 1;
-      // this.paginator.changePage(0);
       this.getUsersList(this.queryPagination);
     });
-  }
-
-  public exportCsv() {
-    this.usersService
-      .exportCsv(this.queryPagination.code_dealer)
-      .subscribe((res) => {
-        if (res) {
-          this.fromBlobToCsv(res);
-        }
-      });
-  }
-
-  private fromBlobToCsv(blob: Blob) {
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'usuarios.csv';
-    link.click();
-    window.URL.revokeObjectURL(url);
   }
 
   public showDniModal(dni: string): void {
@@ -130,8 +136,8 @@ export class UsersComponent implements OnInit {
     };
     this.dialogRef = this.dialogService.open(DniViewComponent, {
       data: data,
-      header: 'Imagen de cédula',
-      width: '70rem',
+      header: "Imagen de cédula",
+      width: "70rem",
     });
 
     this.onCloseModal();

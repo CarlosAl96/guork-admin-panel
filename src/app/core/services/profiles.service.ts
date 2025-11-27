@@ -6,47 +6,50 @@ import {
   HttpHeaders,
   HttpParams,
 } from "@angular/common/http";
-import { catchError, map, Observable, throwError } from "rxjs";
 import { QueryPagination } from "../models/queryPagination";
-import { User } from "../models/user";
 import { ResponsePagination } from "../models/responsePagination";
+import { Profile } from "../models/profile";
+import { catchError, Observable, throwError } from "rxjs";
 
 @Injectable({
   providedIn: "root",
 })
-export class UsersService {
-  private usersUrl: string = `${environment.api_url}users`;
+export class ProfilesService {
+  private profilesUrl: string = `${environment.api_url}profiles`;
 
   constructor(private http: HttpClient) {}
 
-  public getUsers(
+  public getProfiles(
     query: QueryPagination
-  ): Observable<ResponsePagination<User>> {
+  ): Observable<ResponsePagination<Profile>> {
     const httpParams = new HttpParams().appendAll({ ...query });
     const options = httpParams
       ? { params: httpParams, header: new HttpHeaders() }
       : { header: new HttpHeaders() };
 
     return this.http
-      .get<ResponsePagination<User>>(this.usersUrl, options)
+      .get<ResponsePagination<Profile>>(this.profilesUrl, options)
       .pipe(catchError(this.handleError));
   }
 
-  public createUser(user: User): Observable<User> {
+  public createProfile(profile: Profile): Observable<Profile> {
     return this.http
-      .post<User>(this.usersUrl, user)
+      .post<Profile>(this.profilesUrl, profile)
       .pipe(catchError(this.handleError));
   }
 
-  public updateUser(user: Partial<User>, userId: string): Observable<any> {
+  public updateProfile(
+    profile: Partial<Profile>,
+    profileId: string
+  ): Observable<any> {
     return this.http
-      .put<any>(this.usersUrl + "/" + userId, user)
+      .put<any>(this.profilesUrl + "/" + profileId, profile)
       .pipe(catchError(this.handleError));
   }
 
-  public getUserById(userId: string): Observable<User> {
+  public deleteProfile(profileId: string): Observable<boolean> {
     return this.http
-      .get<User>(this.usersUrl + "/" + userId)
+      .delete<boolean>(this.profilesUrl + "/" + profileId)
       .pipe(catchError(this.handleError));
   }
 

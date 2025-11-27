@@ -9,8 +9,28 @@
       <input
         pInputText
         styleClass="w-full"
-        formControlName="name"
-        inputId="name"
+        formControlName="firstName"
+        inputId="firstName"
+      />
+    </div>
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="last_name">Apellido</label>
+      <input
+        pInputText
+        styleClass="w-full"
+        formControlName="lastName"
+        inputId="lastName"
+      />
+    </div>
+  </div>
+  <div class="flex gap-3 mt-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="identification">Cédula</label>
+      <input
+        pInputText
+        styleClass="w-full"
+        formControlName="dni"
+        inputId="dni"
       />
     </div>
     <div class="w-full flex flex-column justify-content-center gap-2">
@@ -20,26 +40,6 @@
         inputId="birthdate"
         styleClass="w-full"
         dateFormat="dd/mm/yy"
-      />
-    </div>
-  </div>
-  <div class="flex gap-3 mt-3">
-    <div class="w-full flex flex-column justify-content-center gap-2">
-      <label for="last_name">Apellido</label>
-      <input
-        pInputText
-        styleClass="w-full"
-        formControlName="last_name"
-        inputId="last_name"
-      />
-    </div>
-    <div class="w-full flex flex-column justify-content-center gap-2">
-      <label for="identification">Cédula</label>
-      <input
-        pInputText
-        styleClass="w-full"
-        formControlName="identification"
-        inputId="identification"
       />
     </div>
   </div>
@@ -58,28 +58,59 @@
       <input
         pInputText
         styleClass="w-full"
-        formControlName="postal_code"
-        inputId="postal_code"
+        formControlName="postalCode"
+        inputId="postalCode"
       />
     </div>
   </div>
+
+  @if(role == 'expert' || (user && user.role == 'expert')) {
   <div class="flex gap-3 mt-3">
     <div class="w-full flex flex-column justify-content-center gap-2">
-      <label for="street">Dirección</label>
+      <label for="profiles">Perfiles</label>
+      <p-multiSelect
+        [options]="profiles"
+        optionLabel="name"
+        optionValue="id"
+        formControlName="profiles"
+        styleClass="w-full"
+        placeholder="Seleccione perfiles"
+      />
+    </div>
+  </div>
+  }
+
+  <div class="flex gap-3 mt-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="email">Correo electrónico</label>
       <input
         pInputText
+        type="email"
         styleClass="w-full"
-        formControlName="street"
-        inputId="street"
+        formControlName="email"
+        inputId="email"
       />
     </div>
     <div class="w-full flex flex-column justify-content-center gap-2">
-      <label for="city">Ciudad</label>
+      <label for="password">Contraseña</label>
+      <p-password
+        inputId="password"
+        styleClass="w-full"
+        inputStyleClass="w-full"
+        formControlName="password"
+        [feedback]="true"
+      />
+    </div>
+  </div>
+
+  <div class="flex gap-3 mt-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="address">Dirección</label>
       <input
         pInputText
         styleClass="w-full"
-        formControlName="city"
-        inputId="city"
+        formControlName="address"
+        inputId="address"
       />
     </div>
   </div>

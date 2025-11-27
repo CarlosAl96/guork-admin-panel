@@ -9,14 +9,31 @@
         [value]="users"
         styleClass="p-datatable-striped"
         [tableStyle]="{ 'min-width': '50rem' }"
+        [loading]="isLoading"
       >
         <ng-template pTemplate="caption">
           <div class="w-full flex justify-content-between">
-            <p-button
-              label="Exportar como CSV"
-              icon="pi pi-download"
-              (click)="exportCsv()"
-            />
+            <div class="flex align-items-center gap-2">
+              <label class="mr-2">Filtrar por tipo:</label>
+              <p-dropdown
+                [options]="userTypes"
+                [(ngModel)]="selectedUserType"
+                optionLabel="name"
+                optionValue="code"
+                placeholder="Tipo de usuario"
+                (onChange)="search()"
+              />
+              <p-button
+                label="Crear Experto"
+                icon="pi pi-plus"
+                (click)="showCreateModal('expert')"
+              />
+              <p-button
+                label="Crear Usuario"
+                icon="pi pi-plus"
+                (click)="showCreateModal('user')"
+              />
+            </div>
 
             <p-inputGroup class="w-5">
               <input
@@ -38,58 +55,55 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th style="width: 10%" pSortableColumn="id">
-              ID<p-sortIcon field="id" />
-            </th>
             <th>Nombre completo</th>
             <th>Correo</th>
+            <th>Rol</th>
             <th>Teléfono</th>
             <th>Cédula</th>
-            <th>Img. Cédula</th>
-            <th>Fecha de nacimiento</th>
-            <th>Fecha de registro</th>
+            <th>Registro</th>
             <th>Acciones</th>
           </tr>
         </ng-template>
         <ng-template pTemplate="body" let-user>
           <tr>
-            <td>{{ user.id }}</td>
             <td
-              [pTooltip]="user.name + ' ' + user.last_name"
+              [pTooltip]="user.firstName + ' ' + user.lastName"
               tooltipPosition="top"
             >
-              {{ user.name + " " + user.last_name }}
+              {{ user.firstName + " " + user.lastName }}
             </td>
             <td [pTooltip]="user.email" tooltipPosition="top">
               {{ user.email }}
             </td>
+            <td [pTooltip]="user.role" tooltipPosition="top">
+              {{
+                user.role == "expert"
+                  ? "Experto"
+                  : user.role == "user"
+                  ? "Usuario"
+                  : "Admin"
+              }}
+            </td>
             <td [pTooltip]="user.phone" tooltipPosition="top">
               {{ user.phone }}
             </td>
-            <td [pTooltip]="user.identification" tooltipPosition="top">
-              {{ user.identification }}
+            <td [pTooltip]="user.dni" tooltipPosition="top">
+              <div class="flex align-items-center gap-1">
+                @if (user.dniImg && user.dniImg != 'undefined' ) {
+                <p-button
+                  icon="pi pi-image"
+                  [rounded]="true"
+                  [text]="true"
+                  [raised]="true"
+                  (click)="showDniModal(user.dniImg)"
+                />
+                }
+                {{ user.dni }}
+              </div>
             </td>
-            <td class="text-center">
-              @if (user.dni_img && user.dni_img != 'undefined' ) {
-              <p-button
-                icon="pi pi-image"
-                [rounded]="true"
-                [text]="true"
-                [raised]="true"
-                (click)="showDniModal(user.dni_img)"
-              />
-              } @else {
-              <span>-</span>
-              }
+            <td [pTooltip]="user.createdAt | dateFormat" tooltipPosition="top">
+              {{ user.createdAt | dateFormat }}
             </td>
-
-            <td [pTooltip]="user.birthdate" tooltipPosition="top">
-              {{ user.birthdate }}
-            </td>
-            <td [pTooltip]="user.date | dateFormat" tooltipPosition="top">
-              {{ user.date | dateFormat }}
-            </td>
-            @if (this.userLogged?.role == 'full_admin') {
             <td class="flex gap-1 p-5">
               <button
                 pButton
@@ -99,7 +113,6 @@
                 (click)="showEditModal(user)"
               ></button>
             </td>
-            }
           </tr>
         </ng-template>
         <ng-template pTemplate="emptymessage">
@@ -118,7 +131,7 @@
       <p-paginator
         #paginator
         (onPageChange)="onPageChange($event)"
-        [rows]="queryPagination.size"
+        [rows]="queryPagination.pageSize"
         [totalRecords]="totalRows"
       />
     </div>
