@@ -1,1 +1,51 @@
-<p>assign-expert works!</p>
+<div class="flex flex-column gap-3">
+  <label class="field-label" for="expert-ac">Seleccionar experto</label>
+  <p-autoComplete
+    inputId="expert-ac"
+    [suggestions]="filteredExperts"
+    [dropdown]="true"
+    [forceSelection]="true"
+    [appendTo]="'body'"
+    [virtualScroll]="true"
+    [delay]="150"
+    [disabled]="loading || assigning"
+    [(ngModel)]="selectedExpert"
+    (completeMethod)="searchExperts($event)"
+    styleClass="w-full"
+    placeholder="Buscar por nombre o email"
+    emptyMessage="No hay expertos con este perfil"
+  >
+    <ng-template let-user pTemplate="item">
+      <div class="user-item">
+        <div class="name">
+          {{ ((user.firstName || "") + " " + (user.lastName || "")).trim() }}
+        </div>
+        <div class="email" *ngIf="user.email">{{ user.email }}</div>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="selectedItem" let-user>
+      <span>
+        {{
+          ((user.firstName || "") + " " + (user.lastName || "")).trim() ||
+            user.email
+        }}
+      </span>
+    </ng-template>
+  </p-autoComplete>
+
+  @if(!loading && experts.length === 0){
+  <div>No hay expertos disponibles para este perfil.</div>
+  }
+
+  <div class="flex justify-content-end mt-3 gap-2">
+    <button
+      pButton
+      type="button"
+      label="Asignar"
+      class="btn-primary"
+      [loading]="assigning"
+      [disabled]="!selectedExpert || assigning || experts.length === 0"
+      (click)="assign()"
+    ></button>
+  </div>
+</div>

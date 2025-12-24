@@ -109,7 +109,7 @@ export class RequestsComponent {
     this.dialogRef = this.dialogService.open(AssignExpertComponent, {
       data: data,
       header: "Asignar experto",
-      width: "80rem",
+      width: "60rem",
     });
 
     this.onCloseModal();

@@ -24,8 +24,8 @@ export class UsersService {
   ): Observable<ResponsePagination<User>> {
     const httpParams = new HttpParams().appendAll({ ...query });
     const options = httpParams
-      ? { params: httpParams, header: new HttpHeaders() }
-      : { header: new HttpHeaders() };
+      ? { params: httpParams, headers: new HttpHeaders() }
+      : { headers: new HttpHeaders() };
 
     return this.http
       .get<ResponsePagination<User>>(this.usersUrl, options)
