@@ -1,0 +1,268 @@
+<div class="page-container">
+  <div class="flex align-items-center justify-content-between">
+    <h2>Listado de solicitudes</h2>
+  </div>
+
+  <p-card>
+    <p-tabMenu
+      [model]="items"
+      [activeItem]="activeTab"
+      (activeItemChange)="onActiveTabChange($event)"
+    />
+
+    @if(activeTab === items[0]) {
+    <div class="flex flex-column justify-content-between gap-3">
+      <p-table
+        [value]="assignments"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [loading]="isLoading"
+      >
+        <ng-template pTemplate="caption">
+          <div class="w-full flex justify-content-end">
+            <p-inputGroup class="w-5">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="modelSearchInProgress"
+                placeholder="Buscar solicitudes en espera"
+                (keyup.enter)="search()"
+              />
+              <button
+                pButton
+                type="button"
+                icon="pi pi-search"
+                class="p-button-primary w-2"
+                (click)="search()"
+              ></button>
+            </p-inputGroup>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Solicitante</th>
+            <th>Perfil</th>
+            <th>Tipo de trabajo</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th>Fecha de creación</th>
+            <th>Acciones</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-assignment>
+          <tr>
+            <td
+              [pTooltip]="
+                assignment.request.requester.firstName +
+                ' ' +
+                assignment.request.requester.lastName
+              "
+              tooltipPosition="top"
+            >
+              {{
+                assignment.request.requester.firstName +
+                  " " +
+                  assignment.request.requester.lastName
+              }}
+            </td>
+            <td
+              [pTooltip]="assignment.request.profile.name"
+              tooltipPosition="top"
+            >
+              {{ assignment.request.profile.name }}
+            </td>
+            <td
+              [pTooltip]="
+                assignment.request.employmentType === 'full-time'
+                  ? 'Tiempo completo'
+                  : 'Medio tiempo'
+              "
+              tooltipPosition="top"
+            >
+              {{
+                assignment.request.employmentType === "full-time"
+                  ? "Tiempo completo"
+                  : "Medio tiempo"
+              }}
+            </td>
+            <td
+              [pTooltip]="assignment.request.profile.amount"
+              tooltipPosition="top"
+            >
+              {{ assignment.request.profile.amount }}
+            </td>
+            <td
+              [pTooltip]="getStatusLabel(assignment.status)"
+              tooltipPosition="top"
+            >
+              {{ getStatusLabel(assignment.status) }}
+            </td>
+            <td
+              [pTooltip]="assignment.request.createdAt | dateFormat"
+              tooltipPosition="top"
+            >
+              {{ assignment.request.createdAt | dateFormat }}
+            </td>
+            <td class="flex gap-1 p-5">
+              <button
+                pButton
+                type="button"
+                icon="pi pi-check-square"
+                class="p-button-primary"
+                (click)="showAssignExpertModal(assignment)"
+              ></button>
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8">
+              {{
+                queryPagination.search == ""
+                  ? "No hay solicitudes en espera"
+                  : "No se han encontrado coincidencias"
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator
+        #paginator
+        (onPageChange)="onPageChange($event)"
+        [rows]="queryPagination.pageSize"
+        [totalRecords]="totalRows"
+      />
+    </div>
+    } @else {
+    <div class="flex flex-column justify-content-between gap-3">
+      <p-table
+        [value]="assignments"
+        styleClass="p-datatable-striped"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [loading]="isLoading"
+      >
+        <ng-template pTemplate="caption">
+          <div class="w-full flex justify-content-end">
+            <p-inputGroup class="w-5">
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="modelSearchAssignment"
+                placeholder="Buscar solicitudes asignadas"
+                (keyup.enter)="search()"
+              />
+              <button
+                pButton
+                type="button"
+                icon="pi pi-search"
+                class="p-button-primary w-2"
+                (click)="search()"
+              ></button>
+            </p-inputGroup>
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th>Solicitante</th>
+            <th>Asignado</th>
+            <th>Perfil</th>
+            <th>Tipo de trabajo</th>
+            <th>Monto</th>
+            <th>Estado</th>
+            <th>Fecha de creación</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-assignment>
+          <tr>
+            <td
+              [pTooltip]="
+                assignment.request.requester.firstName +
+                ' ' +
+                assignment.request.requester.lastName
+              "
+              tooltipPosition="top"
+            >
+              {{
+                assignment.request.requester.firstName +
+                  " " +
+                  assignment.request.requester.lastName
+              }}
+            </td>
+            <td
+              [pTooltip]="
+                assignment.assigned.firstName +
+                ' ' +
+                assignment.assigned.lastName
+              "
+              tooltipPosition="top"
+            >
+              {{
+                assignment.assigned.firstName +
+                  " " +
+                  assignment.assigned.lastName
+              }}
+            </td>
+            <td
+              [pTooltip]="assignment.request.profile.name"
+              tooltipPosition="top"
+            >
+              {{ assignment.request.profile.name }}
+            </td>
+            <td
+              [pTooltip]="
+                assignment.request.employmentType === 'full-time'
+                  ? 'Tiempo completo'
+                  : 'Medio tiempo'
+              "
+              tooltipPosition="top"
+            >
+              {{
+                assignment.request.employmentType === "full-time"
+                  ? "Tiempo completo"
+                  : "Medio tiempo"
+              }}
+            </td>
+            <td
+              [pTooltip]="assignment.request.profile.amount"
+              tooltipPosition="top"
+            >
+              {{ assignment.request.profile.amount }}
+            </td>
+            <td
+              [pTooltip]="getStatusLabel(assignment.status)"
+              tooltipPosition="top"
+            >
+              {{ getStatusLabel(assignment.status) }}
+            </td>
+            <td
+              [pTooltip]="assignment.request.createdAt | dateFormat"
+              tooltipPosition="top"
+            >
+              {{ assignment.request.createdAt | dateFormat }}
+            </td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr>
+            <td colspan="8">
+              {{
+                queryPagination.search == ""
+                  ? "No hay solicitudes asignadas"
+                  : "No se han encontrado coincidencias"
+              }}
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+
+      <p-paginator
+        #paginator
+        (onPageChange)="onPageChange($event)"
+        [rows]="queryPagination.pageSize"
+        [totalRecords]="totalRows"
+      />
+    </div>
+    }
+  </p-card>
+</div>
