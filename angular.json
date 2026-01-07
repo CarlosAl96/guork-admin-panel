@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "admin-panel-zuenio": {
+    "guork-admin-panel": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/admin-panel-zuenio",
+            "outputPath": "dist/guork-admin-panel",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -78,10 +78,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "admin-panel-zuenio:build:production"
+              "buildTarget": "guork-admin-panel:build:production"
             },
             "development": {
-              "buildTarget": "admin-panel-zuenio:build:development"
+              "buildTarget": "guork-admin-panel:build:development"
             }
           },
           "defaultConfiguration": "development"
