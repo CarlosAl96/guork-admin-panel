@@ -77,6 +77,26 @@
         >
       </a>
     </li>
+
+    <li>
+      <a
+        pRipple
+        routerLink="/admin/pagos"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-money-bill text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Pagos</span
+        >
+      </a>
+    </li>
   </ul>
   <ul class="list-none p-0 m-0 overflow-hidden">
     <li>

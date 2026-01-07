@@ -17,6 +17,7 @@ import { Profile } from "../../../core/models/profile";
 import { ProfilesService } from "../../../core/services/profiles.service";
 import { QueryPagination } from "../../../core/models/queryPagination";
 import { MultiSelectModule } from "primeng/multiselect";
+import { FileSelectEvent, FileUploadModule } from "primeng/fileupload";
 
 @Component({
   selector: "app-new-user",
@@ -28,6 +29,7 @@ import { MultiSelectModule } from "primeng/multiselect";
     ReactiveFormsModule,
     PasswordModule,
     MultiSelectModule,
+    FileUploadModule,
   ],
   providers: [],
   templateUrl: "./new-user.component.html",
@@ -40,6 +42,7 @@ export class NewUserComponent {
   public option: string = "";
   public role: string = "";
   public profiles: Profile[] = [];
+  public files: any[] = [];
 
   constructor(
     private readonly formBuilder: FormBuilder,
@@ -111,11 +114,11 @@ export class NewUserComponent {
 
   public saveUser(): void {
     if (this.formGroup.valid) {
-      const user: User = {
+      const payload = this.buildFormData({
         ...this.formGroup.value,
         role: this.role,
-      };
-      this.usersService.createUser(user).subscribe({
+      });
+      this.usersService.createUser(payload).subscribe({
         next: (res) => {
           this.loading = false;
           this.messageService.setMessage({
@@ -139,15 +142,12 @@ export class NewUserComponent {
 
   public editUser() {
     if (this.formGroup.valid) {
-      const user: User = {
-        ...this.formGroup.value,
-      };
-
-      if (user.password === "") {
-        delete user.password;
+      const values: any = { ...this.formGroup.value };
+      if (values.password === "") {
+        delete values.password;
       }
-
-      this.usersService.updateUser(user, this.user.id).subscribe({
+      const payload = this.buildFormData(values);
+      this.usersService.updateUser(payload, this.user.id).subscribe({
         next: (res) => {
           this.loading = false;
           this.messageService.setMessage({
@@ -181,5 +181,36 @@ export class NewUserComponent {
       email: this.user.email,
       profiles: this.user.profiles?.map((profile) => profile.id) || [],
     });
+  }
+
+  public onSelectFile(event: FileSelectEvent): void {
+    this.files = event.currentFiles;
+  }
+
+  private buildFormData(data: any): FormData {
+    const formData = new FormData();
+
+    Object.keys(data).forEach((key) => {
+      const value = data[key];
+      if (value === undefined || value === null || value === "") {
+        return;
+      }
+      if (Array.isArray(value)) {
+        formData.append(key, JSON.stringify(value));
+        return;
+      }
+      formData.append(key, value);
+    });
+
+    if (this.user && this.user.profileImg) {
+      formData.append("profileImg", this.user.profileImg);
+    }
+
+    if (this.files && this.files.length > 0) {
+      const file = this.files[0];
+      formData.append("image", file);
+    }
+
+    return formData;
   }
 }

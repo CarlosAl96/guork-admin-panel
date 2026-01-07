@@ -3,6 +3,8 @@ export interface Profile {
   name: string;
   status: string;
   descriptions?: string;
+  amount?: number;
+  partTimeAmount?: number;
   createdAt?: Date;
   updatedAt?: Date;
 }

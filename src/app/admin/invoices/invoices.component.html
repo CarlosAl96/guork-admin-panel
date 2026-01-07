@@ -1,29 +1,24 @@
 <div class="page-container">
   <div class="flex align-items-center justify-content-between">
-    <h2>Listado de perfiles</h2>
+    <h2>Listado de pagos</h2>
   </div>
 
   <p-card>
     <div class="flex flex-column justify-content-between gap-3">
       <p-table
-        [value]="profiles"
+        [value]="invoices"
         styleClass="p-datatable-striped"
         [tableStyle]="{ 'min-width': '50rem' }"
         [loading]="isLoading"
       >
         <ng-template pTemplate="caption">
-          <div class="w-full flex justify-content-between">
-            <p-button
-              label="Crear Perfil"
-              icon="pi pi-plus"
-              (click)="showCreateModal()"
-            />
+          <div class="w-full flex justify-content-end">
             <p-inputGroup class="w-5">
               <input
                 pInputText
                 type="text"
                 [(ngModel)]="modelSearch"
-                placeholder="Buscar perfiles"
+                placeholder="Buscar pagos"
                 (keyup.enter)="search()"
               />
               <button
@@ -38,55 +33,77 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th>Perfil</th>
-            <th>Estado</th>
-            <th>Montos (TC / MT)</th>
-            <th>Descripciones</th>
-            <th>Fecha de creación</th>
-            <th>Acciones</th>
+            <th>Orden de Compra</th>
+            <th>Pagado por</th>
+            <th>Pagado a</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+            <th>Proximo Pago</th>
+            <th>Descargar</th>
           </tr>
         </ng-template>
-        <ng-template pTemplate="body" let-profile>
+        <ng-template pTemplate="body" let-invoice>
           <tr>
-            <td [pTooltip]="profile.name" tooltipPosition="top">
-              {{ profile.name }}
-            </td>
-            <td [pTooltip]="profile.status" tooltipPosition="top">
+            <td
+              [pTooltip]="
+                { fechaISO: invoice.createdAt, order: invoice.purchaseOrder }
+                  | purchaseOrder
+              "
+              tooltipPosition="top"
+            >
               {{
-                profile.status == "available" ? "Disponible" : "No disponible"
+                { fechaISO: invoice.createdAt, order: invoice.purchaseOrder }
+                  | purchaseOrder
               }}
             </td>
 
             <td
-              [pTooltip]="profile.amount + ' / ' + profile.partTimeAmount"
+              [pTooltip]="invoice.assignment.request.requester.email"
               tooltipPosition="top"
             >
-              {{ profile.amount | currency : "USD" : "symbol" : "1.2-2" }} /
+              {{ invoice.assignment.request.requester.email }}
+            </td>
+
+            <td
+              [pTooltip]="
+                invoice.assignment.assigned
+                  ? invoice.assignment.assigned.email
+                  : 'Sin asignar'
+              "
+              tooltipPosition="top"
+            >
               {{
-                profile.partTimeAmount | currency : "USD" : "symbol" : "1.2-2"
+                invoice.assignment.assigned
+                  ? invoice.assignment.assigned.email
+                  : "Sin asignar"
               }}
             </td>
-            <td [pTooltip]="profile.descriptions" tooltipPosition="top">
-              @for (desc of getArrayFromJson(profile.descriptions); track
-              $index) {
-              <span>{{ desc }}</span>
-              @if($index < getArrayFromJson(profile.descriptions).length - 1) {,
-              } }
+
+            <td [pTooltip]="invoice.amount" tooltipPosition="top">
+              {{ invoice.amount | currency : "USD" : "symbol" : "1.2-2" }}
             </td>
+
             <td
-              [pTooltip]="profile.createdAt | dateFormat"
+              [pTooltip]="invoice.createdAt | dateFormat"
               tooltipPosition="top"
             >
-              {{ profile.createdAt | dateFormat }}
+              {{ invoice.createdAt | dateFormat }}
             </td>
+
+            <td [pTooltip]="invoice.dueDate | dateFormat" tooltipPosition="top">
+              {{ invoice.dueDate | dateFormat }}
+            </td>
+
             <td class="flex gap-1 p-5">
+              @if(invoice.urlInvoice){
               <button
                 pButton
                 type="button"
-                icon="pi pi-pen-to-square"
+                icon="pi pi-download"
                 class="p-button-primary"
-                (click)="showEditModal(profile)"
+                (click)="download(invoice.urlInvoice || '')"
               ></button>
+              }
             </td>
           </tr>
         </ng-template>
@@ -95,7 +112,7 @@
             <td colspan="8">
               {{
                 queryPagination.search == ""
-                  ? "No se han creado perfiles"
+                  ? "No se han creado pagos"
                   : "No se han encontrado coincidencias"
               }}
             </td>

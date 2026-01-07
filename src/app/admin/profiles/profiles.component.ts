@@ -15,6 +15,7 @@ import { User } from "../../core/models/user";
 import { NewProfileComponent } from "./new-profile/new-profile.component";
 import { Profile } from "../../core/models/profile";
 import { DateFormatPipe } from "../../core/pipes/date-format.pipe";
+import { CurrencyPipe } from "@angular/common";
 
 @Component({
   selector: "app-profiles",
@@ -29,6 +30,7 @@ import { DateFormatPipe } from "../../core/pipes/date-format.pipe";
     InputTextModule,
     InputGroupModule,
     DateFormatPipe,
+    CurrencyPipe,
   ],
   providers: [DialogService],
   templateUrl: "./profiles.component.html",

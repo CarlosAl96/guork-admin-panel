@@ -115,6 +115,32 @@
     </div>
   </div>
 
+  <div class="flex gap-3 mt-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label>Seleccione la imágen de perfil del usuario</label>
+      <p-fileUpload
+        [multiple]="false"
+        chooseLabel="Examinar"
+        accept="image/*"
+        maxFileSize="1000000"
+        [showCancelButton]="false"
+        [showUploadButton]="false"
+        (onSelect)="onSelectFile($event)"
+      >
+      </p-fileUpload>
+    </div>
+
+    @if(user && user.profileImg) {
+    <div class="w-2 flex flex-column justify-content-center gap-2">
+      <img
+        [src]="user.profileImg"
+        alt="Imagen de perfil"
+        style="max-width: 150px; max-height: 150px"
+      />
+    </div>
+    }
+  </div>
+
   <div class="w-full flex justify-content-end mt-3">
     @if (option == 'edit') {
     <p-button

@@ -32,13 +32,13 @@ export class UsersService {
       .pipe(catchError(this.handleError));
   }
 
-  public createUser(user: User): Observable<User> {
+  public createUser(user: FormData): Observable<User> {
     return this.http
       .post<User>(this.usersUrl, user)
       .pipe(catchError(this.handleError));
   }
 
-  public updateUser(user: Partial<User>, userId: string): Observable<any> {
+  public updateUser(user: FormData, userId: string): Observable<any> {
     return this.http
       .put<any>(this.usersUrl + "/" + userId, user)
       .pipe(catchError(this.handleError));

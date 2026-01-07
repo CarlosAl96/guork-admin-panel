@@ -15,6 +15,7 @@ import { ToastService } from "../../../core/services/toast.service";
 import { DropOption } from "../../../core/models/dropOption";
 import { DropdownModule } from "primeng/dropdown";
 import { ChipsModule } from "primeng/chips";
+import { InputNumberModule } from "primeng/inputnumber";
 
 @Component({
   selector: "app-new-profile",
@@ -26,6 +27,7 @@ import { ChipsModule } from "primeng/chips";
     ReactiveFormsModule,
     DropdownModule,
     ChipsModule,
+    InputNumberModule,
   ],
   providers: [],
   templateUrl: "./new-profile.component.html",
@@ -52,6 +54,8 @@ export class NewProfileComponent {
       name: ["", Validators.required],
       status: ["available", Validators.required],
       descriptions: ["", []],
+      amount: [0, Validators.required],
+      partTimeAmount: [0, Validators.required],
     });
 
     this.profile = this.config.data.profile;
@@ -80,7 +84,11 @@ export class NewProfileComponent {
         id: "",
         name: this.formGroup.get("name")?.value,
         status: this.formGroup.get("status")?.value,
-        descriptions: JSON.stringify(this.formGroup.get("descriptions")?.value),
+        descriptions: this.formGroup.get("descriptions")?.value
+          ? JSON.stringify(this.formGroup.get("descriptions")?.value)
+          : "[]",
+        amount: this.formGroup.get("amount")?.value,
+        partTimeAmount: this.formGroup.get("partTimeAmount")?.value,
       };
 
       this.profilesService.createProfile(profile).subscribe({
@@ -110,7 +118,11 @@ export class NewProfileComponent {
       const profile: Partial<Profile> = {
         name: this.formGroup.get("name")?.value,
         status: this.formGroup.get("status")?.value,
-        descriptions: JSON.stringify(this.formGroup.get("descriptions")?.value),
+        descriptions: this.formGroup.get("descriptions")?.value
+          ? JSON.stringify(this.formGroup.get("descriptions")?.value)
+          : "[]",
+        amount: this.formGroup.get("amount")?.value,
+        partTimeAmount: this.formGroup.get("partTimeAmount")?.value,
       };
 
       this.profilesService.updateProfile(profile, this.profile.id).subscribe({
@@ -140,6 +152,8 @@ export class NewProfileComponent {
       name: this.profile.name,
       status: this.profile.status,
       descriptions: JSON.parse(this.profile.descriptions || "[]"),
+      amount: this.profile.amount ?? 0,
+      partTimeAmount: this.profile.partTimeAmount ?? 0,
     });
   }
 }

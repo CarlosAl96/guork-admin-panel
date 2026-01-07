@@ -26,6 +26,31 @@
     </div>
   </div>
 
+  <div class="flex gap-3 mt-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="amount">Monto Tiempo Completo</label>
+      <p-inputNumber
+        styleClass="w-full"
+        formControlName="amount"
+        inputId="amount"
+        mode="currency"
+        currency="USD"
+        locale="en-US"
+      />
+    </div>
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="partTimeAmount">Monto Medio Tiempo</label>
+      <p-inputNumber
+        styleClass="w-full"
+        formControlName="partTimeAmount"
+        inputId="partTimeAmount"
+        mode="currency"
+        currency="USD"
+        locale="en-US"
+      />
+    </div>
+  </div>
+
   <div class="flex gap-3 mt-3 w-full">
     <div class="w-full flex flex-column justify-content-center gap-2">
       <label for="descriptions">Descripciones</label>
