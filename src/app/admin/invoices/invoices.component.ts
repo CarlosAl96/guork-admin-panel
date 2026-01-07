@@ -81,7 +81,7 @@ export class InvoicesComponent {
     const fileName = this.purchaseOrderPipe.transform({
       fechaISO: invoice.createdAt,
       order: invoice.purchaseOrder || 0,
-    });
+    }) + ".pdf";
     this.invoicesService
       .downloadInvoicePdf(invoice.urlInvoice)
       .subscribe((res) => {
