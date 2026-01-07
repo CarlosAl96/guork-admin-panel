@@ -45,7 +45,10 @@ export class InvoicesComponent {
     search: "",
   };
 
-  constructor(private readonly invoicesService: InvoicesService) {
+  constructor(
+    private readonly invoicesService: InvoicesService,
+    private readonly purchaseOrderPipe: PurchaseOrderPipe
+  ) {
     this.getInvoicesList(this.queryPagination);
   }
 
@@ -74,13 +77,18 @@ export class InvoicesComponent {
     this.getInvoicesList(this.queryPagination);
   }
 
-  public download(invoiceUrl: string): void {
-    const fileName = `invoice.pdf`;
-    this.invoicesService.downloadInvoicePdf(invoiceUrl).subscribe((res) => {
-      if (res) {
-        this.downloadFile(res, fileName || "invoice.pdf");
-      }
+  public download(invoice: Invoice): void {
+    const fileName = this.purchaseOrderPipe.transform({
+      fechaISO: invoice.createdAt,
+      order: invoice.purchaseOrder || 0,
     });
+    this.invoicesService
+      .downloadInvoicePdf(invoice.urlInvoice)
+      .subscribe((res) => {
+        if (res) {
+          this.downloadFile(res, fileName || "invoice.pdf");
+        }
+      });
   }
 
   private downloadFile(blob: Blob, fileName: string) {

@@ -86,10 +86,16 @@
               }}
             </td>
             <td
-              [pTooltip]="assignment.request.profile.amount"
+              [pTooltip]="
+                (assignment.request.profile.amount
+                  | currency : 'USD' : 'symbol' : '1.2-2') || ''
+              "
               tooltipPosition="top"
             >
-              {{ assignment.request.profile.amount }}
+              {{
+                assignment.request.profile.amount
+                  | currency : "USD" : "symbol" : "1.2-2"
+              }}
             </td>
             <td
               [pTooltip]="getStatusLabel(assignment.status)"

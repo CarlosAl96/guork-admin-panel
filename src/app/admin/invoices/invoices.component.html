@@ -79,7 +79,12 @@
               }}
             </td>
 
-            <td [pTooltip]="invoice.amount" tooltipPosition="top">
+            <td
+              [pTooltip]="
+                (invoice.amount | currency : 'USD' : 'symbol' : '1.2-2') || ''
+              "
+              tooltipPosition="top"
+            >
               {{ invoice.amount | currency : "USD" : "symbol" : "1.2-2" }}
             </td>
 
@@ -101,7 +106,7 @@
                 type="button"
                 icon="pi pi-download"
                 class="p-button-primary"
-                (click)="download(invoice.urlInvoice || '')"
+                (click)="download(invoice)"
               ></button>
               }
             </td>

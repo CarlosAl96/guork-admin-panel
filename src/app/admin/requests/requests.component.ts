@@ -17,6 +17,7 @@ import { TabMenuModule } from "primeng/tabmenu";
 import { MenuItem } from "primeng/api";
 import { Assignment } from "../../core/models/assignment";
 import { AssignExpertComponent } from "./assign-expert/assign-expert.component";
+import { CurrencyPipe } from "@angular/common";
 
 @Component({
   selector: "app-requests",
@@ -32,6 +33,7 @@ import { AssignExpertComponent } from "./assign-expert/assign-expert.component";
     InputGroupModule,
     DateFormatPipe,
     TabMenuModule,
+    CurrencyPipe,
   ],
   providers: [DialogService],
   templateUrl: "./requests.component.html",
