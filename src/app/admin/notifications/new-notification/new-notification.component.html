@@ -1,0 +1,54 @@
+<form
+  class="flex flex-column gap-3"
+  [formGroup]="formGroup"
+  (ngSubmit)="sendNotification()"
+>
+  <div class="flex gap-3 mt-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="title">Título</label>
+      <input
+        pInputText
+        styleClass="w-full"
+        formControlName="title"
+        inputId="title"
+      />
+    </div>
+
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="option">Enviar a</label>
+      <p-dropdown
+        styleClass="w-full"
+        inputId="option"
+        formControlName="option"
+        [options]="options"
+        optionLabel="name"
+        optionValue="code"
+        placeholder="Seleccione una opción"
+      />
+    </div>
+  </div>
+
+  <div class="flex gap-3">
+    <div class="w-full flex flex-column justify-content-center gap-2">
+      <label for="description">Descripción</label>
+      <textarea
+        rows="5"
+        inputId="description"
+        formControlName="description"
+        cols="30"
+        pInputTextarea
+      >
+      </textarea>
+    </div>
+  </div>
+
+  <div class="w-full flex justify-content-end mt-3">
+    <p-button
+      class="btn-primary"
+      type="submit"
+      [disabled]="!formGroup.valid"
+      [loading]="loading"
+      label="Enviar notificación"
+    />
+  </div>
+</form>

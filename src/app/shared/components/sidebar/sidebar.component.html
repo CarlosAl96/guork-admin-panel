@@ -14,7 +14,7 @@
           (click)="changeStatusSidebar(!showSidebar)"
         ></i>
         @if (showSidebar) {
-        <img style="width: 120px" src="./assets/images/logo.png" />
+          <img style="width: 120px" src="./assets/images/logo.png" />
         }
       </div>
     </li>
@@ -94,6 +94,24 @@
             'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
           "
           >Pagos</span
+        >
+      </a>
+
+      <a
+        pRipple
+        routerLink="/admin/notificaciones"
+        routerLinkActive="active"
+        [class]="
+          'item no-underline flex align-items-center cursor-pointer p-3 text-700' +
+          (showSidebar ? '' : ' only-icon')
+        "
+      >
+        <i class="pi pi-money-bill text-2xl"></i>
+        <span
+          [class]="
+            'font-medium ml-2' + (showSidebar ? ' show-item' : ' hide-item')
+          "
+          >Notificaciones</span
         >
       </a>
     </li>
