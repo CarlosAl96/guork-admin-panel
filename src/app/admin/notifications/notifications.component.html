@@ -41,9 +41,6 @@
         </ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th style="width: 10%" pSortableColumn="id">
-              ID<p-sortIcon field="id" />
-            </th>
             <th>Título</th>
             <th>Descripción</th>
             <th>Fecha</th>
@@ -52,18 +49,17 @@
         </ng-template>
         <ng-template pTemplate="body" let-notification>
           <tr>
-            <td>{{ notification.id }}</td>
             <td [pTooltip]="notification.title" tooltipPosition="top">
               {{ notification.title }}
             </td>
-            <td [pTooltip]="notification.description" tooltipPosition="top">
-              {{ notification.description }}
+            <td [pTooltip]="notification.content" tooltipPosition="top">
+              {{ notification.content }}
             </td>
             <td
-              [pTooltip]="notification.created_date | dateFormat"
+              [pTooltip]="notification.createdAt | dateFormat"
               tooltipPosition="top"
             >
-              {{ notification.created_date | dateFormat }}
+              {{ notification.createdAt | dateFormat }}
             </td>
 
             <td class="flex gap-1 p-5">
@@ -79,7 +75,7 @@
         </ng-template>
         <ng-template pTemplate="emptymessage">
           <tr>
-            <td colspan="5">
+            <td colspan="4">
               {{
                 queryPagination.search == ""
                   ? "No se han creado notificaiones"

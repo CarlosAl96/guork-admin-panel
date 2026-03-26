@@ -54,9 +54,9 @@ export class NewNotificationComponent {
         id: 0,
         title: this.formGroup.value.title,
         content: this.formGroup.value.description,
-        //option: this.formGroup.value.option,
         userIds: [],
-        created_date: new Date(),
+        createdAt: new Date(),
+        updatedAt: new Date(),
       };
       this.notificationsService.sendNotification(notification).subscribe({
         next: (res) => {},

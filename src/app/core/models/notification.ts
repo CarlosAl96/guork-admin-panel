@@ -3,5 +3,6 @@ export interface PushNotification {
   title: string;
   content: string;
   userIds: string[];
-  created_date: Date;
+  createdAt: Date;
+  updatedAt: Date;
 }

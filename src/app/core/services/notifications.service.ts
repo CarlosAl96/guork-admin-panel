@@ -15,28 +15,27 @@ import { environment } from "../../../environments/environment";
   providedIn: "root",
 })
 export class NotificationsService {
-  private notificationsUrl: string = `${environment.api_url}users/pushNotifications`;
+  private sendNotificationsUrl: string = `${environment.api_url}users/pushNotifications`;
+  private notificationsUrl: string = `${environment.api_url}notifications`;
 
   constructor(private http: HttpClient) {}
 
-  // public getNotificationsList(
-  //   query: QueryPagination,
-  // ): Observable<ApiResponse<ResponsePagination<PushNotification[]>>> {
-  //   const httpParams = new HttpParams().appendAll({ ...query });
-  //   const options = httpParams
-  //     ? { params: httpParams, header: new HttpHeaders() }
-  //     : { header: new HttpHeaders() };
+  public getNotificationsList(
+    query: QueryPagination,
+  ): Observable<ResponsePagination<PushNotification>> {
+    const httpParams = new HttpParams().appendAll({ ...query });
+    const options = httpParams
+      ? { params: httpParams, header: new HttpHeaders() }
+      : { header: new HttpHeaders() };
 
-  //   return this.http
-  //     .get<
-  //       ApiResponse<ResponsePagination<PushNotification[]>>
-  //     >(this.notificationsUrl, options)
-  //     .pipe(catchError(this.handleError));
-  // }
+    return this.http
+      .get<ResponsePagination<PushNotification>>(this.notificationsUrl, options)
+      .pipe(catchError(this.handleError));
+  }
 
   public sendNotification(notification: PushNotification): Observable<any> {
     return this.http
-      .post<any>(this.notificationsUrl, notification)
+      .post<any>(this.sendNotificationsUrl, notification)
       .pipe(catchError(this.handleError));
   }
 

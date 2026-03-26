@@ -51,7 +51,6 @@ export class NotificationsComponent {
   public queryPagination: QueryPagination = {
     page: 1,
     pageSize: 50,
-    search: "",
   };
 
   constructor(
@@ -66,12 +65,14 @@ export class NotificationsComponent {
   }
 
   private getNotificationsList(query: QueryPagination): void {
-    // this.notificationsService.getNotificationsList(query).subscribe((res) => {
-    //   if (res) {
-    //     this.notifications = res.response.data;
-    //     this.totalRows = res.response.totalRows;
-    //   }
-    // });
+    this.notificationsService.getNotificationsList(query).subscribe((res) => {
+      if (res) {
+        this.notifications = res.items;
+        console.log(this.notifications);
+        
+        this.totalRows = res.totalItems;
+      }
+    });
   }
 
   public search(): void {
